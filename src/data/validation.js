@@ -1,10 +1,10 @@
 export const validate = (values) => {
   const errors = {};
-  //   if (!values.empId) {
-  //     errors.empId = "*This Field is Required";
-  //   } else if (/^[0-9]+$/.test(values.empId)) {
-  //     errors.empId = "Only Number Is Accepted";
-  //   }
+  if (!values.salary) {
+    errors.salary = "*This Field is Required";
+  } else if (!/^[0-9]+$/i.test(values.salary)) {
+    errors.salary = "Only Number Is Accepted";
+  }
   if (!values.firstName) {
     errors.firstName = "*This Field is Required";
   } else if (values.firstName.length > 15) {

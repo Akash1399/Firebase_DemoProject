@@ -13,6 +13,9 @@ function TableRows(props) {
       <StyledTableCell align="left">{row?.email}</StyledTableCell>
       <StyledTableCell align="left">{row?.gender}</StyledTableCell>
       <StyledTableCell align="left">{row?.hobbies}</StyledTableCell>
+      <StyledTableCell align="left">{row?.city}</StyledTableCell>
+      <StyledTableCell align="left">{row?.salary}</StyledTableCell>
+
       <StyledTableCell align="left">
         <DropDown data={row} />
       </StyledTableCell>

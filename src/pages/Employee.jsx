@@ -54,11 +54,14 @@ function Employee() {
               <StyledTableCell align="left">Email</StyledTableCell>
               <StyledTableCell align="left">Gender</StyledTableCell>
               <StyledTableCell align="left">Hobbies </StyledTableCell>
+              <StyledTableCell align="left">City </StyledTableCell>
+              <StyledTableCell align="left">Salary </StyledTableCell>
+
               <StyledTableCell align="left">Department </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRows key={rows?.uid} row={rows} />;
+            <TableRows key={rows?.uid} row={rows} />
           </TableBody>
         </Table>
       </TableContainer>

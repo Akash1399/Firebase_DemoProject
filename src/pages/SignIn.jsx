@@ -7,11 +7,6 @@ import { Link } from "react-router-dom";
 function SignIn() {
   const Firebase = useFirebase();
   const Navigate = useNavigate;
-  useEffect(() => {
-    if (!Firebase.type && Firebase.LoggedIn) {
-      Navigate(`/${Firebase.type}`);
-    }
-  }, []);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -19,9 +14,13 @@ function SignIn() {
     },
     onSubmit: (values) => {
       Firebase.signInWithEmailAndPass(values);
-      console.log(values);
     },
   });
+  useEffect(() => {
+    if (!Firebase.type && Firebase.LoggedIn) {
+      Navigate(`/${Firebase.type}`);
+    }
+  }, []);
   return (
     <div
       style={{

@@ -27,7 +27,13 @@ function DropDown(props) {
   //   setAge(data.department);
   // }, []);
   return (
-    <div style={{ display: "flex" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
       <div>
         {edit ? (
           <FormControl
@@ -46,12 +52,13 @@ function DropDown(props) {
                 <em>None</em>
               </MenuItem>
               <MenuItem value={"IT"}>IT</MenuItem>
-              <MenuItem value={"Twenty"}>Twenty</MenuItem>
-              <MenuItem value={"Thirty"}>Thirty</MenuItem>
+              <MenuItem value={"HR"}>HR</MenuItem>
+              <MenuItem value={"Sales"}>Sales</MenuItem>
+              <MenuItem value={"Marketing"}>Marketing</MenuItem>
             </Select>
           </FormControl>
         ) : (
-          <Typography variant="h6">{data?.department}</Typography>
+          <Typography>{data?.department}</Typography>
         )}
       </div>
       {manager && (

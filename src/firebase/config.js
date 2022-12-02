@@ -12,6 +12,9 @@ import {
   updateDoc,
   where,
   query,
+  orderBy,
+  startAt,
+  endAt,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -50,7 +53,6 @@ export const FirebaseProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   useEffect(() => {
     onAuthStateChanged(FirebaseAuth, (user) => {
-      console.log("hello");
       if (user) {
         setLoggedIn(user);
         setIsLoggedIn(true);
@@ -63,12 +65,9 @@ export const FirebaseProvider = (props) => {
   }, []);
   const createUserDocument = async (user, data) => {
     if (!user) return;
-    const { email } = data;
-    const { firstName } = data;
-    const { lastName } = data;
-    const { gender } = data;
-    const { hobbies } = data;
-    const { type } = data;
+    const { email, firstName, lastName, gender, hobbies, type, salary, city } =
+      data;
+
     const uid = user.user.uid;
 
     await setDoc(doc(firestore, `users`, `${user?.user.uid}`), {
@@ -79,9 +78,11 @@ export const FirebaseProvider = (props) => {
       hobbies,
       uid,
       type,
+      salary,
+      city,
       department: "",
       createdAt: new Date(),
-    });
+    }).then((res) => alert("Account Created"));
   };
 
   // Function to SignUp
@@ -93,7 +94,6 @@ export const FirebaseProvider = (props) => {
     )
       .then((res) => {
         createUserDocument(res, data);
-        console.log(res);
       })
       .catch((err) => console.log(err));
   };
@@ -121,8 +121,13 @@ export const FirebaseProvider = (props) => {
     }
   };
   // Function to get all employee Data
-  const getAllData = () => {
-    return getDocs(collection(firestore, "users"));
+  const getAllData = async () => {
+    const q = query(
+      collection(firestore, "users"),
+      where("type", "==", "employee")
+    );
+    const docs = await getDocs(q);
+    return docs.docs;
   };
   // Update the department
   const updateDepartment = async (data, department) => {
@@ -144,6 +149,107 @@ export const FirebaseProvider = (props) => {
       console.log(err);
     }
   };
+  //!Different Queryies Function
+  const handleITSURATQuery = async () => {
+    try {
+      const q = query(
+        collection(firestore, "users"),
+        where("city", "==", "Surat"),
+        where("department", "==", "IT"),
+        where("type", "==", "employee")
+      );
+      const docs = await getDocs(q);
+      const data = docs.docs;
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleEmployeeSales = async () => {
+    try {
+      const q = query(
+        collection(firestore, "users"),
+        where("department", "==", "Sales"),
+        where("type", "==", "employee")
+      );
+      const docs = await getDocs(q);
+      const data = docs.docs;
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleMaxSalaryHR = async () => {
+    try {
+      const q = query(
+        collection(firestore, "users"),
+        where("type", "==", "employee"),
+        where("department", "==", "HR"),
+        orderBy("salary", "desc")
+      );
+      const docs = await getDocs(q);
+      const data = docs.docs;
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleMinSalaryHR = async () => {
+    try {
+      const q = query(
+        collection(firestore, "users"),
+        where("department", "==", "IT"),
+        where("type", "==", "employee"),
+        orderBy("salary")
+      );
+      const docs = await getDocs(q);
+      const data = docs.docs;
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleCityWithA = async () => {
+    try {
+      const q = query(
+        collection(firestore, "users"),
+        where("type", "==", "employee"),
+        orderBy("city"),
+        startAt("A" || "a")
+      );
+      const docs = await getDocs(q);
+      const data = docs.docs;
+      console.log(docs);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  // Function to Handle the Query From Manager
+  const handleQueryManager = async (value) => {
+    if (value == "1") {
+      const res = await handleMaxSalaryHR();
+      return res;
+    }
+    if (value == "2") {
+      const res = await handleMinSalaryHR();
+      return res;
+    } else if (value == "3") {
+      const res = await handleITSURATQuery();
+      return res;
+    } else if (value == "4") {
+      const res = await handleCityWithA();
+      return res;
+    } else if (value == "5") {
+      const res = await handleEmployeeSales();
+      return res;
+    } else if (value == "6") {
+      const res = await getAllData();
+      return res;
+    } else {
+      return [];
+    }
+  };
   // Function to Logout
   const logOut = () => {
     signOut(FirebaseAuth);
@@ -160,6 +266,7 @@ export const FirebaseProvider = (props) => {
         logOut,
         isLoggedIn,
         getEmployeeData,
+        handleQueryManager,
       }}
     >
       {props.children}
