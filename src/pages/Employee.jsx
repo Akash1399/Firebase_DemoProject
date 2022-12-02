@@ -22,7 +22,9 @@ function Employee() {
   useEffect(() => {
     Firebase.getEmployeeData(uid).then((res) => {
       setRows(res);
-    });
+    }).catch(err){
+      console.log(err)
+    };
   }, [uid]);
   useEffect(() => {
     if (!(Firebase.type === "employee") && !Firebase.LoggedIn) {

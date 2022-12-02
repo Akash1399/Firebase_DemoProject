@@ -82,7 +82,8 @@ export const FirebaseProvider = (props) => {
       city,
       department: "",
       createdAt: new Date(),
-    }).then((res) => alert("Account Created"));
+    });
+    alert("account Created");
   };
 
   // Function to SignUp
